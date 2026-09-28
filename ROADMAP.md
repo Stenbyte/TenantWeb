@@ -9,7 +9,7 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 |-------|--------|
 | **V1** | Postgres cutover, bookings, tenant allowlist, isolation, versioning. Core flows work on desktop + phone **browser** (basic responsive). |
 | **V2** | Landlord value features + intentional **mobile vs desktop layouts** (breakpoint design). Danish i18n. PWA foundation (manifest / installable). Secrets hygiene (user secrets + `.cursorignore`). |
-| **V3** | Growth features, ops, stronger isolation if needed, lean Azure deploy. PWA polish (offline shell where useful). |
+| **V3** | Growth features, auth/security hardening, multi-user / multi-instance scale, ops, lean Azure. PWA polish. |
 
 ## V1 — Booking core + Postgres + tenant allowlist
 
@@ -45,13 +45,18 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 - [ ] Add `.cursorignore` in API + Web (env, secrets, dumps, certs) so agent/context skips them
 - [ ] Stronger isolation if needed (RLS / schema) — only with a written why
 
-## V3 — Growth / ops + PWA polish
+## V3 — Growth / ops / security / scale
 
 - [ ] PWA polish (service worker / light offline shell if it earns its keep)
 - [ ] Notice board (beskedtavle)
 - [ ] Slot trading
 - [ ] Audit log + retention
-- [ ] Rate-limit hardening + abuse tracking
+- [ ] Hash refresh tokens at rest (store hash only; compare on refresh)
+- [ ] Refresh reuse detection (rotated token reused → revoke user sessions)
+- [ ] Shared rate-limit + login lockout store (Redis or DB) so multi-instance APIs don’t reset abuse state
+- [ ] Rate-limit hardening + abuse tracking (beyond per-node in-memory)
+- [ ] EF/Npgsql pool + query tuning under concurrent tenants (bookings peak)
+- [ ] Horizontal API scale checklist: stateless app, refresh in Postgres, no sticky sessions required
 - [ ] App Insights + alerts (still watch free-tier)
 - [ ] Deploy lean Azure when product justifies it
 
