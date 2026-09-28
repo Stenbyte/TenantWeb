@@ -16,7 +16,7 @@ Product: Denmark tenant/landlord laundry booking. Progressive web direction long
 5. No double booking: DB uniqueness/concurrency on slot + tests.
 6. Tenant isolation: shared DB + tenant/building key on rows + enforced filters + integration tests. No separate-schema / RLS in V1.
 7. Landlord creates tenant accounts (option A) — allowlist only; no open self-serve signup for booking users.
-8. BuildingSettings foundation: slot length, max bookings/week (even if UI is minimal).
+8. BuildingSettings foundation: slot length, max bookings per user (even if UI is minimal).
 9. API + Web versioning basics (not Danish i18n yet).
 10. Tests on auth + booking isolation paths.
 11. Landlord panel only as far as: manage tenants + see bookings.

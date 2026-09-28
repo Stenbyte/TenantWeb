@@ -17,11 +17,11 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 - [ ] Mongo removed from runtime paths (API + Web talk Postgres only)
 - [x] Refresh tokens stored/validated in Postgres
 - [x] Cookie auth flags verified (HttpOnly, Secure, SameSite)
-- [ ] Book + cancel slot end-to-end on Postgres
+- [x] Book + cancel slot end-to-end on Postgres
 - [ ] Double-booking prevented (constraint + concurrency) + tests
 - [ ] Shared-DB tenant key isolation + integration tests (no cross-landlord reads)
 - [ ] Landlord creates tenant accounts (invite/create; no open signup for tenants)
-- [x] BuildingSettings: slot length, max bookings/week
+- [x] BuildingSettings: slot length, max bookings per user
 - [ ] API versioning basics
 - [ ] Web app versioning basics
 - [ ] Auth + booking isolation tests in CI locally
