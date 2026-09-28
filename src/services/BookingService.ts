@@ -65,22 +65,22 @@ export const editSlot = async (args: EditSlotId) => {
 
 export const cancelAllBookings = async () => {
   try {
-    const { data } = await api.post(`${Config.API_BASE_URL}/api/booking/cancel`,
+    const { data } = await api.post(
+      `${Config.API_BASE_URL}/api/booking/cancel`,
+      {},
       {
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data?.message;
-      if (errorMessage === "You can not add new reservation") {
-        throw new Error("You can not add new reservation")
-      }
+      throw new Error(errorMessage ?? "Failed to cancel bookings.");
     }
-    throw new Error("Failed to remove slot.")
+    throw new Error("Failed to cancel bookings.");
   }
 };
 
