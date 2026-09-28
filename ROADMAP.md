@@ -14,7 +14,7 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 ## V1 — Booking core + Postgres + tenant allowlist
 
 - [x] Local Postgres setup re-verified (how to run, connection string, migrate) + README if missing
-- [ ] Mongo removed from runtime paths (API + Web talk Postgres only)
+- [x] Mongo removed from runtime paths (API + Web talk Postgres only)
 - [x] Refresh tokens stored/validated in Postgres
 - [x] Cookie auth flags verified (HttpOnly, Secure, SameSite)
 - [x] Book + cancel slot end-to-end on Postgres
