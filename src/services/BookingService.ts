@@ -38,27 +38,28 @@ export const reserveSlot = async (args: BookingSlot) => {
   }
 };
 
-export const editSlot = async (args: BookingSlot | EditSlotId) => {
+export const editSlot = async (args: EditSlotId) => {
   try {
-    const { data } = await api.post(`${Config.API_BASE_URL}/api/booking/edit`, {
-      ...args
-    },
+    if (!args.id) {
+      throw new Error("Booking id is required");
+    }
+
+    const { data } = await api.post(
+      `${Config.API_BASE_URL}/api/booking/edit`,
+      { id: args.id },
       {
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     return data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data?.message;
-
-      if (errorMessage === "You can not add new reservation") {
-        throw new Error("You can not add new reservation")
-      }
+      throw new Error(errorMessage ?? "Failed to remove slot.");
     }
-    throw new Error("Failed to remove slot.")
+    throw new Error("Failed to remove slot.");
   }
 };
 
