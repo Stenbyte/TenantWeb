@@ -26,6 +26,7 @@ import { useAuthContext } from "../../context/UseAuthContext";
 import { BookingSlot, EditSlotId, Machine, TIME_SLOTS } from "../../constants";
 import { useFetchBookings } from "../../hooks/bookingsHooks";
 import { useAppSelector } from "../../reduxState/store";
+import { bookingMatchesCell } from "../../utils/bookingSlotMatch";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -104,19 +105,12 @@ export function BookingTable() {
 
   const getReservedSlotData = (day: string, time: string) => {
     for (const booking of bookings || []) {
-      for (const slot of booking.slots) {
-        if (
-          dayjs(slot.day).format("YYYY-MM-DD") ===
-            dayjs(day).format("YYYY-MM-DD") &&
-          slot.timeSlots.includes(time) &&
-          slot.booked
-        ) {
-          return {
-            isBooked: slot.booked,
-            slotId: slot._id,
-            bookingUserId: booking.userId,
-          };
-        }
+      if (bookingMatchesCell(booking, day, time)) {
+        return {
+          isBooked: true,
+          slotId: booking.id,
+          bookingUserId: booking.userId,
+        };
       }
     }
     return { isBooked: false, slotId: undefined, bookingUserId: undefined };
@@ -191,7 +185,7 @@ export function BookingTable() {
                           }
                           key={slotId}
                           onClick={() => {
-                            edit({ _id: slotId });
+                            edit({ id: slotId });
                           }}
                         >
                           Booked
@@ -202,9 +196,9 @@ export function BookingTable() {
                           size="small"
                           data-testid={`reserve-slot-${slotIndex}-${dayIndex}`}
                           onClick={() => {
-                            const machinesIds = selectedMachines.map(
-                              (m) => m?._id
-                            ) as unknown as Pick<Machine, "_id">[];
+                            const machinesIds = selectedMachines
+                              .filter((m): m is Machine => !!m?.id)
+                              .map((m) => ({ id: m.id }));
                             reserve({
                               day,
                               timeSlots: [timeSlots],

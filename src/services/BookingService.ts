@@ -1,22 +1,25 @@
-
 import { AxiosError } from "axios";
 import { Config } from "../../config";
 import { api } from '../services/AxiosConfig';
 import dayjs from "dayjs";
 import { BookingSlot, EditSlotId } from "../constants";
 
-
-
-
-export const reserveSlot = async (args: BookingSlot | EditSlotId) => {
+export const reserveSlot = async (args: BookingSlot) => {
   try {
-    const { data } = await api.post(`${Config.API_BASE_URL}/api/booking/create`, {
-      ...args
-    },
+    const day = dayjs(args.day).format("YYYY-MM-DD");
+    const machineId = args.selectedMachinesIds?.[0]?.id;
+
+    const { data } = await api.post(
+      `${Config.API_BASE_URL}/api/booking/create`,
+      {
+        day,
+        timeSlots: args.timeSlots,
+        ...(machineId ? { machineId } : {}),
+      },
       {
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     return data;
@@ -26,10 +29,12 @@ export const reserveSlot = async (args: BookingSlot | EditSlotId) => {
       if (errorMessage === "You can not add new reservation") {
         throw new Error("You can not add new reservation");
       }
-    } else {
-      throw new Error("Failed to reserve slot. Please try again");
+      if (errorMessage === "Time slot is already taken") {
+        throw new Error("Time slot is already taken");
+      }
+      throw new Error(errorMessage ?? "Failed to reserve slot. Please try again");
     }
-
+    throw new Error("Failed to reserve slot. Please try again");
   }
 };
 
@@ -97,4 +102,3 @@ export const isTimeSlotInPast = (selectedDateUtc: string, timeSlot: string) => {
     (slotDateLocal.isSame(todayLocal) && slotEndLocal.isBefore(nowLocal))
   );
 };
-

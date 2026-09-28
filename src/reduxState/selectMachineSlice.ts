@@ -18,7 +18,7 @@ const machineSelectSlice = createSlice({
         autoSelectMachines: (state, action: PayloadAction<Partial<Machine>[]>) => {
             action.payload.forEach((newMachine) => {
 
-                const alreadyExists = state.some((m) => m?._id === newMachine._id);
+                const alreadyExists = state.some((m) => m?.id === newMachine.id);
                 if (!alreadyExists) {
                     state.push(newMachine as Machine);
                 }

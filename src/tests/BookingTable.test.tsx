@@ -15,11 +15,43 @@ import * as auth from "../hooks/auhtHooks";
 import * as bookingService from "../services/BookingService";
 import * as bookingsHooks from "../hooks/bookingsHooks";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UiContext } from "../context/UiContext";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme";
 import { initialState } from "../providers/UiProvider";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const mockBooking = (overrides: {
+  userId?: string;
+  dayOffset?: number;
+  timeSlot?: string;
+  id?: string;
+} = {}) => {
+  const {
+    userId = "user",
+    dayOffset = 1,
+    timeSlot = "08:00-11:00",
+    id = "bookingId",
+  } = overrides;
+  const [startH, endH] = timeSlot.split("-");
+  const day = dayjs().tz("Europe/Copenhagen").add(dayOffset, "day").startOf("day");
+  const [sh, sm] = startH.split(":").map(Number);
+  const [eh, em] = endH.split(":").map(Number);
+  return {
+    id,
+    userId,
+    buildingId: "building",
+    machineId: "machine",
+    startTime: day.hour(sh).minute(sm).utc().toISOString(),
+    endTime: day.hour(eh).minute(em).utc().toISOString(),
+    createdAt: dayjs().toISOString(),
+  };
+};
 
 describe("BookingTable", () => {
   beforeEach(() => {
@@ -49,20 +81,7 @@ describe("BookingTable", () => {
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(bookingsHooks, "useFetchBookings").mockImplementation((): any => {
-      return createMockUseQueryResult([
-        {
-          userId: "user",
-          slots: [
-            {
-              day: dayjs().add(1, "day"),
-              timeSlots: ["08:00-11:00"],
-              booked: true,
-              id: "slotId",
-            },
-          ],
-          id: "bookingId",
-        },
-      ]);
+      return createMockUseQueryResult([mockBooking()]);
     });
 
     defaultRender(
@@ -125,20 +144,7 @@ describe("BookingTable", () => {
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(bookingsHooks, "useFetchBookings").mockImplementation((): any => {
-      return createMockUseQueryResult([
-        {
-          userId: "user",
-          slots: [
-            {
-              day: dayjs().add(1, "day"),
-              timeSlots: ["08:00-11:00"],
-              booked: true,
-              id: "slotId",
-            },
-          ],
-          id: "bookingId",
-        },
-      ]);
+      return createMockUseQueryResult([mockBooking()]);
     });
 
     defaultRender(
@@ -165,24 +171,8 @@ describe("BookingTable", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(bookingsHooks, "useFetchBookings").mockImplementation((): any => {
       return createMockUseQueryResult([
-        {
-          userId: "user",
-          slots: [
-            {
-              day: dayjs().add(1, "day"),
-              timeSlots: ["08:00-11:00"],
-              booked: true,
-              id: "slotId",
-            },
-            {
-              day: dayjs().add(1, "day"),
-              timeSlots: ["11:00-14:00"],
-              booked: true,
-              id: "slotId2",
-            },
-          ],
-          id: "user",
-        },
+        mockBooking({ id: "slotId", timeSlot: "08:00-11:00" }),
+        mockBooking({ id: "slotId2", timeSlot: "11:00-14:00" }),
       ]);
     });
     const state = {

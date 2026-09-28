@@ -53,14 +53,14 @@ export function MachineSelectBtn({
 
   const selectMachine = useCallback(() => {
     if (
-      typeof machine._id === "string" &&
+      typeof machine.id === "string" &&
       Object.values(MachineStatusEnum).includes(machine.status) &&
       Object.values(MachineNameEnum).includes(machine.name) &&
       typeof machine.buildingId === "string"
     ) {
       dispatch(
         setMachine({
-          _id: machine._id!,
+          id: machine.id,
           name: machine.name,
           buildingId: machine.buildingId,
           status: machine.status,
@@ -71,7 +71,7 @@ export function MachineSelectBtn({
 
   return (
     <>
-      {selectedMachines.some((m) => m?._id === machine._id) && (
+      {selectedMachines.some((m) => m?.id === machine.id) && (
         <Badge
           badgeContent=""
           variant="dot"

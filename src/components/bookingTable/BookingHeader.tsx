@@ -15,7 +15,7 @@ import { CancelBtn } from "../Buttons/Cancel";
 import { ReportBtn } from "../Buttons/Report";
 import "../../App.css";
 import { useAuthContext } from "../../context/UseAuthContext";
-import { Booking, MachineNameEnum } from "../../constants";
+import { Booking, MachineNameEnum, MAX_RESERVATIONS_PER_WEEK } from "../../constants";
 import { useMemo, useState } from "react";
 import { MachineSelectBtn } from "../Buttons/MachineSelectBtn";
 import { useFetchMachines } from "../../hooks/ machineHooks";
@@ -33,20 +33,20 @@ export function BookingHeader({
   const { user } = useAuthContext();
   const { data: machines } = useFetchMachines();
 
-  const reservationCount = data.bookings?.find(
-    (booking) => booking.userId === user?.userId
-  )?.reservationsLeft;
+  const userBookingCount =
+    data.bookings?.filter(
+      (booking) => booking.userId.toString() === user?.userId?.toString()
+    ).length ?? 0;
+
+  const reservationCount = Math.max(
+    0,
+    MAX_RESERVATIONS_PER_WEEK - userBookingCount
+  );
 
   // maybe extract fn to separate service, instead calling everywhere useAuthCtx ? just revisit
   const disabledBtnIfNoBookings = useMemo(() => {
-    return (
-      data.bookings?.some(
-        (booking) =>
-          booking.userId.toString() === user?.userId.toString() &&
-          booking.slots.some((slot) => slot.booked === true)
-      ) ?? false
-    );
-  }, [data.bookings, user?.userId]);
+    return userBookingCount > 0;
+  }, [userBookingCount]);
 
   function ShowMachinesNameAndCounts() {
     const getMachinesCount = machines?.filter((machine) => {
@@ -100,7 +100,7 @@ export function BookingHeader({
                     sx={{
                       width: "100px",
                     }}
-                    key={machine._id ?? index}
+                    key={machine.id ?? index}
                   >
                     <MachineSelectBtn
                       disabledBtnIfNoBookings={machine.status}
