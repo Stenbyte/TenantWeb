@@ -21,7 +21,7 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 - [ ] Double-booking prevented (constraint + concurrency) + tests
 - [ ] Shared-DB tenant key isolation + integration tests (no cross-landlord reads)
 - [ ] Landlord creates tenant accounts (invite/create; no open signup for tenants)
-- [ ] BuildingSettings: slot length, max bookings/week
+- [x] BuildingSettings: slot length, max bookings/week
 - [ ] API versioning basics
 - [ ] Web app versioning basics
 - [ ] Auth + booking isolation tests in CI locally

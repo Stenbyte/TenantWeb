@@ -43,7 +43,6 @@ export function BookingHeader({
     MAX_RESERVATIONS_PER_WEEK - userBookingCount
   );
 
-  // maybe extract fn to separate service, instead calling everywhere useAuthCtx ? just revisit
   const disabledBtnIfNoBookings = useMemo(() => {
     return userBookingCount > 0;
   }, [userBookingCount]);
