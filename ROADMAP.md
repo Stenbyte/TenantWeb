@@ -16,7 +16,7 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 - [x] Local Postgres setup re-verified (how to run, connection string, migrate) + README if missing
 - [ ] Mongo removed from runtime paths (API + Web talk Postgres only)
 - [x] Refresh tokens stored/validated in Postgres
-- [ ] Cookie auth flags verified (HttpOnly, Secure, SameSite)
+- [x] Cookie auth flags verified (HttpOnly, Secure, SameSite)
 - [ ] Book + cancel slot end-to-end on Postgres
 - [ ] Double-booking prevented (constraint + concurrency) + tests
 - [ ] Shared-DB tenant key isolation + integration tests (no cross-landlord reads)
