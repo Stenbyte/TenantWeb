@@ -27,6 +27,7 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 - [ ] Auth + booking isolation tests in CI locally
 - [ ] Landlord panel: manage tenants + view bookings
 - [ ] FluentValidation on all request DTOs (booking + auth); drop mixed DataAnnotations on those DTOs
+- [ ] Exception middleware: client gets CustomException only; unexpected errors logged + opaque 500 (no stack/message leak; App Insights later)
 - [ ] Core booking/auth usable on phone browser (responsive breakpoints; same app)
 
 **V1 done when:** local Postgres is reproducible; landlord + tenant creds work; invite/create tenant; book without races; isolation proven with tests; booking works on a phone browser — all on Postgres, no Mongo.
