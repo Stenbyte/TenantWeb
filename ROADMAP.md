@@ -5,11 +5,11 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 
 ## Stages (overview)
 
-| Stage | Focus |
-|-------|--------|
-| **V1** | Postgres cutover, bookings, tenant allowlist, isolation, versioning. Core flows work on desktop + phone **browser** (basic responsive). |
+| Stage  | Focus                                                                                                                                                                                            |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **V1** | Postgres cutover, bookings, tenant allowlist, isolation, versioning. Core flows work on desktop + phone **browser** (basic responsive).                                                          |
 | **V2** | Landlord value features + intentional **mobile vs desktop layouts** (breakpoint design). Danish i18n. PWA foundation (manifest / installable). Secrets hygiene (user secrets + `.cursorignore`). |
-| **V3** | Growth features, auth/security hardening, multi-user / multi-instance scale, ops, lean Azure. PWA polish. |
+| **V3** | Growth features, auth/security hardening, multi-user / multi-instance scale, ops, lean Azure. PWA polish.                                                                                        |
 
 ## V1 — Booking core + Postgres + tenant allowlist
 
@@ -26,6 +26,7 @@ Delivery shape: **one web app** → responsive by screen size → later PWA. No 
 - [ ] Web app versioning basics
 - [ ] Auth + booking isolation tests in CI locally
 - [ ] Landlord panel: manage tenants + view bookings
+- [ ] FluentValidation on all request DTOs (booking + auth); drop mixed DataAnnotations on those DTOs
 - [ ] Core booking/auth usable on phone browser (responsive breakpoints; same app)
 
 **V1 done when:** local Postgres is reproducible; landlord + tenant creds work; invite/create tenant; book without races; isolation proven with tests; booking works on a phone browser — all on Postgres, no Mongo.
